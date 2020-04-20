@@ -30,16 +30,12 @@ const styles = StyleSheet.create({
     },
 
     card:{
+      ...StyleSheet.absoluteFillObject,
       borderWidth: 1,
       borderColor: '#ddd',
       borderRadius: 8,
       margin: 30,
       overflow: 'hidden',
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
       elevation: 5,
       shadowColor: '#000',
        shadowOpacity:0.05,
@@ -100,9 +96,59 @@ const styles = StyleSheet.create({
           width: 0,
           height: 2,
        }
-    }
+    },
 
-    
+    matchContainer:{
+      
+      ...StyleSheet.absoluteFillObject,
+      backgroundColor: 'rgba(0, 0, 0, 0.8)',
+      elevation: 6,
+      justifyContent: 'center',
+      alignItems: 'center',
+
+    },
+
+    matchAvatar:{
+      width: 160,
+      height: 160,
+      borderRadius: 80,
+      borderWidth: 5,
+      borderColor: '#fff',
+      marginVertical: 30,
+
+    },
+
+    matchImage:{
+      height: 60,
+      resizeMode: 'contain',
+      
+
+    },
+
+    matchName:{
+      fontSize: 26,
+      fontWeight: 'bold',
+      color: '#fff',
+
+
+    },
+
+    matchBio:{
+      marginTop: 10,
+      fontSize: 16,
+      color: 'rgba(255, 255, 255, 0.8)',
+      lineHeight: 24,
+      textAlign: 'center',
+      paddingHorizontal: 30,
+
+    },
+
+    closeMatch:{
+      fontSize: 16,
+      color: 'rgba(255, 255, 255, 0.8)',
+      marginTop: 30,
+      fontWeight: 'bold',
+    },
 })
 
 export default styles;

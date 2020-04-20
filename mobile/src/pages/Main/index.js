@@ -1,41 +1,56 @@
 import React, { useEffect, useState } from 'react';
 import { SafeAreaView, Image, View, Text, TouchableOpacity } from 'react-native';
-import {useNavigation, useRoute} from '@react-navigation/native'
+import { useRoute } from '@react-navigation/native'
+import socketio from 'socket.io-client'
+import styles from'./styles'
 
 import logo from '../../assets/logo.png'
 import like from '../../assets/like.png'
 import dislike from '../../assets/dislike.png'
-import styles from './styles'
+import itsamatch from '../../assets/itsamatch.png'
 import api from '../../services/Api'
 
 export default function Main() {
 
   const route = useRoute();
-  let login = route.params._id
+  const id = route.params._id
 
-   const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState([]);
+  const [matchDev, setMatchDev] = useState(null);
 
     useEffect(() => {
       async function loadUsers(){
         const response = await api.get('/devs', {
-          headers: {user: login}        
+          headers: {user: id}        
           
         });
-
+      
         setUsers(response.data)
 
       }
       
       loadUsers();
 
-    }, [route.params.id]);
+    }, [id]);
+
+
+    useEffect(() => {
+      const socket = socketio('http://192.168.0.77:3333',{
+        query: { user: id }
+      });
+
+        socket.on('match', dev =>{
+        setMatchDev(dev)
+
+      })
+    }, [id]);
 
     async function handleLike(){
       
       const [user, ...rest] = users;
       
       await api.post(`/devs/${user._id}/likes`, null,{
-        headers: {user: login}
+        headers: {user: id}
       })
       setUsers(rest)
     }
@@ -44,7 +59,7 @@ export default function Main() {
       const [user, ...rest] = users;
       
       await api.post(`/devs/${user._id}/dislikes`, null,{
-        headers: {user: login}
+        headers: {user: id}
       })
       setUsers(rest)
     }
@@ -67,15 +82,30 @@ export default function Main() {
         )) }
       </View>
 
+    {users.length > 0 &&(
       <View style={styles.buttonsContainer}>
-        <TouchableOpacity style={styles.button} onPress={handleDislike}>
-          <Image source={dislike}/>
-        </TouchableOpacity>
+      <TouchableOpacity style={styles.button} onPress={handleDislike}>
+        <Image source={dislike}/>
+      </TouchableOpacity>
 
-        <TouchableOpacity style={styles.button} onPress={handleLike}>
-          <Image source={like}/>
+      <TouchableOpacity style={styles.button} onPress={handleLike}>
+        <Image source={like}/>
+      </TouchableOpacity>
+    </View>
+    )}
+      
+    { matchDev && (
+      <View  style={styles.matchContainer}>
+        <Image style={styles.matchImage} source={itsamatch} />
+        <Image style={styles.matchAvatar}  source={{uri: matchDev.avatar_url}} />
+        <Text style={styles.matchName}>{matchDev.name}</Text>
+        <Text style={styles.matchBio}>{matchDev.bio}</Text>
+        <TouchableOpacity onPress={() => setMatchDev(null)}>
+          <Text style={styles.closeMatch}>FECHAR</Text>
         </TouchableOpacity>
       </View>
+    )}
+
     </SafeAreaView>
   );
 }
