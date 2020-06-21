@@ -1,9 +1,9 @@
 import React, {useState} from 'react';
 
-import logo from '../../assets/logo.svg'
-import api from '../../services/Api'
+import logo from '../../assets/logo.svg';
+import api from '../../services/Api';
 
-import './styles.css'
+import './styles.css';
 
 export default function Login({ history }) {
 
@@ -27,13 +27,13 @@ export default function Login({ history }) {
           <form onSubmit={handleSubmit}>
 
             <img src={logo} alt="Tindev" />
-            <input 
+            <input
             placeholder="Digite seu login do Github"
             value={login}
             onChange={ e => setLogin(e.target.value)}
             />
             <button type="submit">Enviar</button>
-          
+
           </form>
 
         </div>
