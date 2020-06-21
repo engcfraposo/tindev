@@ -4,7 +4,7 @@ import Dev from '../models/Dev';
 
 
 export default {
-    
+
     async index(req, res){
         const { user } = req.headers;
 
@@ -21,8 +21,8 @@ export default {
         })
         return res.json(users)
     },
-    
-    
+
+
     async store(req, res) {
         const { login } = req.body;
 
@@ -31,7 +31,7 @@ export default {
         if (userExists) {
             return res.json(userExists);
         }
-        
+
         const response = await axios.get(`https://api.github.com/users/${login}`);
 
         const { name, bio, avatar_url } = response.data
@@ -42,8 +42,8 @@ export default {
             bio,
             avatar_url,
         })
-        
-        
+
+
 
         return res.json(dev);
     }

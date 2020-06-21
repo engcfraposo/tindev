@@ -13,4 +13,4 @@ routes.post('/devs/:DevId/likes', LikeController.store);
 routes.post('/devs/:DevId/dislikes', DislikeController.store);
 
 
-module.exports = routes;
+export default routes;
