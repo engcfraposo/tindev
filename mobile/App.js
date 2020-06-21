@@ -1,5 +1,5 @@
 import React from 'react';
-import {  YellowBox} from 'react-native'
+import {  YellowBox } from 'react-native';
 
 YellowBox.ignoreWarnings([
   'Unrecognized WebSocket'

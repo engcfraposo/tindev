@@ -1,102 +1,97 @@
-import React, { useEffect, useState } from 'react';
-import socketio from 'socket.io-client'
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable react/prop-types */
+import React, { useEffect, useState } from "react";
+import socketio from "socket.io-client";
 
-import api from '../../services/Api';
-import logo from '../../assets/logo.svg';
-import like from '../../assets/like.svg';
-import dislike from '../../assets/dislike.svg';
-import itsamatch from '../../assets/itsamatch.png';
+import api from "../../services/Api";
+import logo from "../../assets/logo.svg";
+import like from "../../assets/like.svg";
+import dislike from "../../assets/dislike.svg";
+import itsamatch from "../../assets/itsamatch.png";
 
-import './styles.css';
+import "./styles.css";
 
-export default function Main( {match} ) {
+export default function Main({ match }) {
+  const [users, setUsers] = useState([]);
+  const [matchDev, setMatchDev] = useState(null);
 
-    const [users, setUsers] = useState([]);
-    const [matchDev, setMatchDev] = useState(null);
-
-
-    useEffect(() => {
-      async function loadUsers(){
-        const response = await api.get('/devs', {
-          headers: {user: match.params.id}
-
-        });
-
-        setUsers(response.data)
-
-      }
-
-      loadUsers();
-
-    }, [match.params.id]);
-
-    useEffect(() => {
-      const socket = socketio('http://localhost:3333',{
-        query: { user: match.params.id }
+  useEffect(() => {
+    async function loadUsers() {
+      const response = await api.get("/devs", {
+        headers: { user: match.params.id },
       });
 
-      socket.on('match', dev =>{
-        setMatchDev(dev)
-      })
-
-    }, [match.params.id])
-
-    async function handleLike(id){
-      await api.post(`/devs/${id}/likes`, null, {
-        headers: {user: match.params.id}
-      })
-      setUsers(users.filter(user => user._id !== id))
+      setUsers(response.data);
     }
 
-    async function handleDislike(id){
-      await api.post(`/devs/${id}/dislikes`, null, {
-        headers: {user: match.params.id}
-      })
-      setUsers(users.filter(user => user._id !== id))
-    }
+    loadUsers();
+  }, [match.params.id]);
 
-    return (
-        <div className="main-container">
+  useEffect(() => {
+    const socket = socketio("http://localhost:3333", {
+      query: { user: match.params.id },
+    });
 
-            <img src={logo} alt="Tindev" />
-            {users.length > 0 ? (
-            <ul>
-              {users.map(user => (
-                <li key={user._id}>
-                <img src={user.avatar_url} alt={user.name}/>
-                <footer>
-                  <strong>{user.name}</strong>
-                  <p>{user.bio}</p>
+    socket.on("match", (dev) => {
+      setMatchDev(dev);
+    });
+  }, [match.params.id]);
 
-                </footer>
-                <div className="buttons">
-                    <button type="button" onClick={() => handleDislike(user._id)}>
+  async function handleLike(id) {
+    await api.post(`/devs/${id}/likes`, null, {
+      headers: { user: match.params.id },
+    });
+    setUsers(users.filter((user) => user._id !== id));
+  }
 
-                      <img src={dislike} alt="Dislike"/>
+  async function handleDislike(id) {
+    await api.post(`/devs/${id}/dislikes`, null, {
+      headers: { user: match.params.id },
+    });
+    setUsers(users.filter((user) => user._id !== id));
+  }
 
-                    </button>
-                    <button type="button" onClick={() => handleLike(user._id)} >
-
-                      <img src={like} alt="Like"/>
-
-                    </button>
-                  </div>
-              </li>
-              ))}
-            </ul>) :(
-              <div className="empty">
-                Acabou :(
+  return (
+    <div className="main-container">
+      <img src={logo} alt="Tindev" />
+      {users.length > 0 ? (
+        <ul>
+          {users.map((user) => (
+            <li key={user._id}>
+              <img src={user.avatar_url} alt={user.name} />
+              <footer>
+                <strong>{user.name}</strong>
+                <p>{user.bio}</p>
+              </footer>
+              <div className="buttons">
+                <button type="button" onClick={() => handleDislike(user._id)}>
+                  <img src={dislike} alt="Dislike" />
+                </button>
+                <button type="button" onClick={() => handleLike(user._id)}>
+                  <img src={like} alt="Like" />
+                </button>
               </div>
-            )}
-            { matchDev && (
-              <div className="match-container">
-                <img src={itsamatch} alt="Its a match!"/>
-                <img src={matchDev.avatar_url} alt={matchDev.name} className="avatar"/>
-                <strong>{matchDev.name}</strong>
-                <p>{matchDev.bio}</p>
-                <button type="button" onClick={() => setMatchDev(null)}>FECHAR</button>
-              </div>
-            )}
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <div className="empty">Acabou :(</div>
+      )}
+      {matchDev && (
+        <div className="match-container">
+          <img src={itsamatch} alt="Its a match!" />
+          <img
+            src={matchDev.avatar_url}
+            alt={matchDev.name}
+            className="avatar"
+          />
+          <strong>{matchDev.name}</strong>
+          <p>{matchDev.bio}</p>
+          <button type="button" onClick={() => setMatchDev(null)}>
+            FECHAR
+          </button>
         </div>
-      );
+      )}
+    </div>
+  );
 }
