@@ -1,6 +1,6 @@
-const Dev = require('../models/Dev');
+import Dev from '../models/Dev';
 
-module.exports = {
+export default {
 
     async store(req, res) {
         const { user } = req.headers;

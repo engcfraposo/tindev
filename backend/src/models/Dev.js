@@ -1,6 +1,6 @@
-const { Schema, model } = require('mongoose');
+import mongoose from 'mongoose';
 
-const DevSchema = new Schema({
+const DevSchema = new mongoose.Schema({
     name:{
         type: String,
         required: true,
@@ -27,4 +27,4 @@ const DevSchema = new Schema({
     timestamps: true,
 });
 
-module.exports = model( 'Dev', DevSchema);
+export default mongoose.model( 'Dev', DevSchema);

@@ -1,10 +1,10 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const cors = require('cors');
-const socketio = require('socket.io');
-const http = require('http')
+import express from'express'
+import mongoose from'mongoose'
+import cors from'cors'
+import socketio from'socket.io'
+import http from'http'
 
-const routes = require('./routes');
+import routes from'./routes'
 
 
 const app = express();

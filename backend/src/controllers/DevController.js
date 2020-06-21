@@ -1,9 +1,9 @@
-const axios = require('axios');
-const Dev = require('../models/Dev');
+import axios from 'axios';
+import Dev from '../models/Dev';
 
 
 
-module.exports = {
+export default {
     
     async index(req, res){
         const { user } = req.headers;

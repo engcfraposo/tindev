@@ -1,10 +1,10 @@
-const express = require('express');
+import { Router } from 'express';
 
-const DevController = require('./controllers/DevController')
-const LikeController = require('./controllers/LikeController')
-const DislikeController = require('./controllers/DislikeController')
+import DevController from './controllers/DevController'
+import LikeController from './controllers/LikeController'
+import DislikeController from './controllers/DislikeController'
 
-const routes = express.Router();
+const routes = Router();
 
 routes.get('/devs', DevController.index);
 routes.post('/devs', DevController.store);
